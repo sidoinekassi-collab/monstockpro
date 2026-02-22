@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f6b3a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MonStock Pro">
+<meta name="description" content="Gestion de stock et bénéfices pour commerçants ivoiriens">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<title>MonStock Pro</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --green:#0f6b3a;--green2:#1a8f4f;--green3:#e8f5ee;
+  --gold:#e8a010;--gold2:#fff4d6;
+  --orange:#e05c2a;--red:#d93025;--red2:#ffeaea;
+  --blue:#1565c0;--blue2:#e8f0fe;
+  --bg:#f6f4f0;--surface:#ffffff;--border:#e4ddd3;
+  --text:#1a1a1a;--muted:#7a7068;
+  --shadow:0 2px 16px rgba(0,0,0,.07);
+  --shadow2:0 8px 32px rgba(0,0,0,.12);
+}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* ===== LANDING ===== */
+#landing{display:block;}
+#app{display:none;}
+
+.lp-nav{background:var(--green);padding:0 32px;height:62px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+.lp-logo{font-size:21px;font-weight:900;color:#fff;letter-spacing:-1px;}
+.lp-logo em{color:var(--gold);font-style:normal;}
+.lp-spacer{flex:1;}
+.lp-link{color:rgba(255,255,255,.75);font-size:13px;cursor:pointer;text-decoration:none;margin:0 10px;}
+.lp-link:hover{color:#fff;}
+.btn-lp{background:var(--gold);color:#1a1a1a;padding:9px 22px;border-radius:8px;font-size:13px;font-weight:800;cursor:pointer;border:none;transition:all .18s;}
+.btn-lp:hover{background:#c88a00;transform:translateY(-1px);}
+
+.hero{background:linear-gradient(135deg,#0a4a28 0%,#1a7a4a 100%);padding:80px 32px 64px;text-align:center;color:#fff;position:relative;overflow:hidden;}
+.hero-pattern{position:absolute;inset:0;opacity:.05;background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:28px 28px;}
+.hero-badge{display:inline-block;background:rgba(232,160,16,.2);border:1px solid rgba(232,160,16,.5);color:var(--gold);font-size:12px;font-weight:700;padding:5px 16px;border-radius:20px;margin-bottom:22px;letter-spacing:.5px;position:relative;}
+.hero h1{font-size:clamp(30px,5vw,56px);font-weight:900;line-height:1.1;margin-bottom:16px;position:relative;}
+.hero h1 em{color:var(--gold);font-style:normal;}
+.hero p{font-size:16px;opacity:.8;max-width:520px;margin:0 auto 36px;line-height:1.65;position:relative;}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;}
+.btn-hero{background:var(--gold);color:#1a1a1a;padding:14px 34px;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;border:none;transition:all .2s;box-shadow:0 4px 20px rgba(232,160,16,.35);}
+.btn-hero:hover{background:#c88a00;transform:translateY(-2px);}
+.btn-hero2{background:rgba(255,255,255,.12);color:#fff;border:1.5px solid rgba(255,255,255,.35);padding:14px 34px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-hero2:hover{background:rgba(255,255,255,.2);}
+.hero-kpis{display:flex;gap:40px;justify-content:center;margin-top:52px;flex-wrap:wrap;position:relative;}
+.hero-kpi{text-align:center;}
+.hero-kpi-n{font-size:30px;font-weight:900;color:var(--gold);}
+.hero-kpi-l{font-size:12px;opacity:.6;margin-top:2px;}
+
+.feats{padding:64px 32px;max-width:1080px;margin:0 auto;}
+.sec-title{text-align:center;font-size:30px;font-weight:800;margin-bottom:6px;}
+.sec-sub{text-align:center;color:var(--muted);font-size:15px;margin-bottom:44px;}
+.feats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.feat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:26px;transition:transform .2s,box-shadow .2s;}
+.feat:hover{transform:translateY(-4px);box-shadow:var(--shadow2);}
+.feat.highlight{border-color:var(--green);background:var(--green3);}
+.feat-ico{font-size:30px;margin-bottom:12px;}
+.feat-title{font-size:16px;font-weight:700;margin-bottom:7px;}
+.feat.highlight .feat-title{color:var(--green);}
+.feat-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+.pricing{background:var(--green3);padding:64px 32px;}
+.pricing-inner{max-width:780px;margin:0 auto;}
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.price-card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:26px;}
+.price-card.pro{border-color:var(--green);background:linear-gradient(135deg,var(--green),#0a4a28);color:#fff;}
+.price-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;}
+.price-card.pro .price-tag{color:rgba(255,255,255,.6);}
+.price-n{font-size:34px;font-weight:900;margin-bottom:3px;}
+.price-period{font-size:12px;color:var(--muted);}
+.price-card.pro .price-period{color:rgba(255,255,255,.6);}
+.price-feats{list-style:none;margin:18px 0;display:flex;flex-direction:column;gap:8px;}
+.price-feats li{font-size:13px;display:flex;align-items:center;gap:7px;}
+.price-feats li::before{content:'✓';color:var(--green);font-weight:800;}
+.price-card.pro .price-feats li::before{color:var(--gold);}
+.price-card.pro .price-feats li{color:rgba(255,255,255,.85);}
+.btn-price{width:100%;padding:11px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;border:none;margin-top:6px;}
+.btn-price-out{background:transparent;border:2px solid var(--green);color:var(--green);}
+.btn-price-solid{background:var(--gold);color:#1a1a1a;}
+
+.testis{padding:64px 32px;max-width:960px;margin:0 auto;}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.testi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.testi-stars{color:var(--gold);font-size:13px;margin-bottom:9px;}
+.testi-txt{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px;}
+.testi-name{font-size:13px;font-weight:700;}
+.testi-role{font-size:11px;color:var(--muted);}
+
+.lp-cta{background:var(--green);padding:52px 32px;text-align:center;color:#fff;}
+.lp-cta h2{font-size:26px;font-weight:800;margin-bottom:8px;}
+.lp-cta p{font-size:15px;opacity:.7;margin-bottom:24px;}
+.lp-footer{background:#0a4a28;color:rgba(255,255,255,.5);text-align:center;padding:20px;font-size:12px;}
+
+/* ===== APP ===== */
+.app-bar{background:var(--green);color:#fff;padding:0 22px;height:54px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.app-logo{font-size:17px;font-weight:900;letter-spacing:-.5px;}
+.app-logo em{color:var(--gold);font-style:normal;}
+.app-spacer{flex:1;}
+.app-date{font-size:11px;opacity:.6;}
+.btn-back{background:rgba(255,255,255,.15);border:none;color:#fff;padding:6px 13px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;}
+.btn-back:hover{background:rgba(255,255,255,.25);}
+.app-av{width:33px;height:33px;border-radius:8px;background:var(--gold);color:#1a1a1a;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;}
+
+.tabs{background:var(--surface);border-bottom:2px solid var(--border);display:flex;padding:0 18px;overflow-x:auto;}
+.tab{padding:12px 16px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .15s;display:flex;align-items:center;gap:5px;}
+.tab:hover{color:var(--text);}
+.tab.on{color:var(--green);border-bottom-color:var(--green);}
+.tab.ai-tab{color:var(--blue);}
+.tab.ai-tab.on{color:var(--blue);border-bottom-color:var(--blue);}
+.tbadge{background:var(--red);color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:10px;}
+
+.app-body{max-width:1080px;margin:0 auto;padding:20px;}
+.sec{display:none;}
+.sec.on{display:block;}
+
+/* stats cards */
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:15px;box-shadow:var(--shadow);}
+.sc-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px;}
+.sc-val{font-size:23px;font-weight:800;line-height:1;margin-bottom:3px;}
+.sc-unit{font-size:10px;color:var(--muted);}
+
+/* card */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:var(--shadow);margin-bottom:16px;}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+.card-title{font-size:14.5px;font-weight:700;display:flex;align-items:center;gap:6px;}
+
+/* form */
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.fg3{display:grid;grid-template-columns:2fr 1fr auto;gap:10px;align-items:end;}
+label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+input,select{padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;background:var(--bg);color:var(--text);outline:none;transition:border-color .15s;width:100%;font-family:inherit;}
+input:focus,select:focus{border-color:var(--green);}
+
+/* buttons */
+.btn{padding:9px 18px;border-radius:8px;border:none;font-size:13.5px;font-weight:700;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px;font-family:inherit;}
+.btn-g{background:var(--green);color:#fff;} .btn-g:hover{background:#0a4a28;}
+.btn-gold{background:var(--gold);color:#1a1a1a;} .btn-gold:hover{background:#c88a00;}
+.btn-out{background:var(--bg);border:1.5px solid var(--border);color:var(--text);} .btn-out:hover{border-color:var(--green);color:var(--green);}
+.btn-r{background:var(--red2);color:var(--red);border:1.5px solid #ffc0c0;} .btn-r:hover{background:#ffd0d0;}
+.btn-b{background:var(--blue2);color:var(--blue);border:1.5px solid #c5d8ff;}
+.btn-sm{padding:5px 12px;font-size:11.5px;}
+
+/* table */
+.tw{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;padding:8px 11px;text-align:left;border-bottom:2px solid var(--border);}
+td{padding:10px 11px;font-size:13px;border-bottom:1px solid var(--border);}
+tr:last-child td{border:none;}
+tr:hover td{background:var(--bg);}
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+.b-ok{background:var(--green3);color:var(--green);}
+.b-warn{background:var(--gold2);color:#8a5e00;}
+.b-red{background:var(--red2);color:var(--red);}
+
+/* alerts */
+.alert-item{display:flex;align-items:center;gap:12px;padding:12px 15px;border-radius:10px;margin-bottom:9px;background:var(--gold2);border:1px solid #ffd080;}
+.alert-item.crit{background:var(--red2);border-color:#ffc0c0;}
+.alert-ico{font-size:20px;}
+.alert-body{flex:1;}
+.alert-body strong{display:block;font-size:13.5px;margin-bottom:2px;}
+.alert-body span{font-size:12px;color:var(--muted);}
+
+/* benef hero */
+.bh{background:linear-gradient(135deg,var(--green),#0a4a28);color:#fff;border-radius:12px;padding:24px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.bh-lbl{font-size:10.5px;opacity:.65;text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;}
+.bh-val{font-size:34px;font-weight:900;line-height:1;}
+.bh-sub{font-size:11px;opacity:.5;margin-top:4px;}
+
+/* AI */
+.ai-bar{background:linear-gradient(135deg,#0f1e3a,#1a3a5c);border-radius:12px;padding:20px;margin-bottom:16px;color:#fff;display:flex;align-items:center;gap:14px;}
+.ai-orb{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#4facfe,#00f2fe);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 0 18px rgba(79,172,254,.45);animation:glow 3s ease-in-out infinite;}
+@keyframes glow{0%,100%{box-shadow:0 0 18px rgba(79,172,254,.4);}50%{box-shadow:0 0 30px rgba(79,172,254,.7);}}
+.ai-bar-txt h3{font-size:16px;font-weight:800;margin-bottom:2px;}
+.ai-bar-txt p{font-size:12px;opacity:.6;}
+
+.ai-insight{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:9px;display:flex;align-items:flex-start;gap:12px;}
+.ai-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.ico-g{background:var(--green3);}
+.ico-gold{background:var(--gold2);}
+.ico-r{background:var(--red2);}
+.ico-b{background:var(--blue2);}
+.ai-body{flex:1;}
+.ai-ttl{font-size:13.5px;font-weight:700;margin-bottom:4px;}
+.ai-txt{font-size:12.5px;color:var(--muted);line-height:1.55;}
+.ai-tag{display:inline-block;margin-top:6px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase;}
+.tag-a{background:var(--red2);color:var(--red);}
+.tag-s{background:var(--green3);color:var(--green);}
+.tag-i{background:var(--blue2);color:var(--blue);}
+.tag-t{background:var(--gold2);color:#8a5e00;}
+
+.ai-dots{display:flex;gap:5px;justify-content:center;padding:30px 0;}
+.ai-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:bounce .8s infinite;}
+.ai-dot:nth-child(2){animation-delay:.15s;}
+.ai-dot:nth-child(3){animation-delay:.3s;}
+@keyframes bounce{0%,100%{transform:translateY(0);}40%{transform:translateY(-8px);}}
+
+/* chat */
+.chat-wrap{background:#f0f4ff;border:1.5px solid #c5d8ff;border-radius:12px;padding:15px;margin-top:15px;}
+.chat-msgs{max-height:280px;overflow-y:auto;margin-bottom:11px;display:flex;flex-direction:column;gap:9px;}
+.msg{max-width:85%;padding:9px 13px;border-radius:10px;font-size:13px;line-height:1.5;}
+.msg-bot{background:var(--surface);border:1px solid var(--border);align-self:flex-start;}
+.msg-me{background:var(--green);color:#fff;align-self:flex-end;}
+.chat-row{display:flex;gap:8px;}
+.chat-row input{border-radius:25px;padding:9px 16px;}
+.btn-send{background:var(--green);color:#fff;border:none;border-radius:25px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;}
+
+/* export */
+.export-preview{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px;}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:500;opacity:0;pointer-events:none;transition:opacity .2s;}
+.overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--surface);border-radius:14px;padding:26px;width:90%;max-width:440px;box-shadow:var(--shadow2);transform:translateY(14px);transition:transform .2s;}
+.overlay.open .modal{transform:none;}
+.modal-title{font-size:17px;font-weight:800;margin-bottom:18px;}
+.modal-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;}
+
+/* toast */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--green);color:#fff;padding:11px 18px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:var(--shadow2);transform:translateY(70px);opacity:0;transition:all .3s;z-index:999;max-width:320px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.err{background:var(--red);}
+
+/* empty */
+.empty{text-align:center;padding:40px 20px;color:var(--muted);}
+.empty-ico{font-size:40px;margin-bottom:10px;}
+
+/* print */
+@media print{.app-bar,.tabs,.no-print{display:none!important;}.app-body{padding:0;max-width:100%;}}
+
+/* responsive */
+@media(max-width:900px){.feats-grid,.testi-grid{grid-template-columns:1fr;}.pricing-grid{grid-template-columns:1fr;}.bh{grid-template-columns:1fr;}}
+@media(max-width:680px){.sgrid{grid-template-columns:1fr 1fr;}.fg2{grid-template-columns:1fr;}.fg3{grid-template-columns:1fr;}.app-body{padding:12px;}.feats{padding:40px 18px;}.hero{padding:52px 18px 44px;}.lp-nav{padding:0 16px;}}
+</style>
+</head>
+<body>
+
+<!-- ======= LANDING ======= -->
+<div id="landing">
+  <nav class="lp-nav">
+    <div class="lp-logo">MonStock<em> Pro</em></div>
+    <div class="lp-spacer"></div>
+    <a class="lp-link" onclick="scrollToEl('feats')">Fonctionnalités</a>
+    <a class="lp-link" onclick="scrollToEl('pricing')">Tarifs</a>
+    <button class="btn-lp" onclick="ouvrirApp()">🚀 Commencer — Gratuit</button>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-pattern"></div>
+    <div class="hero-badge">🇨🇮 Conçu pour la Côte d'Ivoire</div>
+    <h1>Tu penses que tu gagnes ?<br><em>Vérifie.</em></h1>
+    <p>MonStock Pro est l'outil de gestion fait pour les boutiques, maquis et vendeurs ivoiriens. Simple, rapide, efficace.</p>
+    <div class="hero-btns">
+      <button class="btn-hero" onclick="ouvrirApp()">🚀 Essayer gratuitement</button>
+      <button class="btn-hero2" onclick="scrollToEl('feats')">Voir les fonctionnalités</button>
+    </div>
+    <div class="hero-kpis">
+      <div class="hero-kpi"><div class="hero-kpi-n">100%</div><div class="hero-kpi-l">Gratuit pour commencer</div></div>
+      <div class="hero-kpi"><div class="hero-kpi-n">2 min</div><div class="hero-kpi-l">Pour configurer</div></div>
+      <div class="hero-kpi"><div class="hero-kpi-n">0</div><div class="hero-kpi-l">Connaissance technique requise</div></div>
+    </div>
+  </div>
+
+  <div class="feats" id="feats">
+    <div class="sec-title">Tout ce dont vous avez besoin</div>
+    <div class="sec-sub">Une application complète, sans complication</div>
+    <div class="feats-grid">
+      <div class="feat"><div class="feat-ico">📦</div><div class="feat-title">Gestion des produits</div><div class="feat-desc">Ajoutez vos produits avec prix d'achat et de vente. Suivez votre stock en temps réel.</div></div>
+      <div class="feat"><div class="feat-ico">🛒</div><div class="feat-title">Enregistrement rapide</div><div class="feat-desc">Enregistrez une vente en 3 clics. Le stock se met à jour automatiquement.</div></div>
+      <div class="feat"><div class="feat-ico">💰</div><div class="feat-title">Bénéfices en temps réel</div><div class="feat-desc">Voyez exactement combien vous gagnez. Par produit, par jour, par mois.</div></div>
+      <div class="feat"><div class="feat-ico">⚠️</div><div class="feat-title">Alertes de stock</div><div class="feat-desc">Soyez alerté avant d'être en rupture. Ne perdez plus de ventes à cause d'un stock vide.</div></div>
+      <div class="feat highlight"><div class="feat-ico">🤖</div><div class="feat-title">IA Conseillère — Exclusif</div><div class="feat-desc">Notre IA analyse vos ventes et vous donne des conseils personnalisés pour augmenter vos bénéfices.</div></div>
+      <div class="feat"><div class="feat-ico">📄</div><div class="feat-title">Export PDF</div><div class="feat-desc">Générez des rapports de ventes complets en PDF. Partagez avec votre comptable.</div></div>
+    </div>
+  </div>
+
+  <div class="pricing" id="pricing">
+    <div class="pricing-inner">
+      <div class="sec-title">Tarifs simples</div>
+      <div class="sec-sub" style="margin-bottom:28px;">Commencez gratuitement. Passez Pro quand vous êtes prêt.</div>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-tag">Gratuit</div>
+          <div class="price-n">0 F</div>
+          <div class="price-period">Pour toujours</div>
+          <ul class="price-feats">
+            <li>Jusqu'à 20 produits</li>
+            <li>Gestion des ventes</li>
+            <li>Alertes de stock</li>
+            <li>Historique 30 jours</li>
+          </ul>
+          <button class="btn-price btn-price-out" onclick="ouvrirApp()">Commencer maintenant</button>
+        </div>
+        <div class="price-card pro">
+          <div class="price-tag">⭐ Pro</div>
+          <div class="price-n">2 000 F</div>
+          <div class="price-period">par mois · sans engagement</div>
+          <ul class="price-feats">
+            <li>Produits illimités</li>
+            <li>IA Conseillère avancée</li>
+            <li>Export PDF illimité</li>
+            <li>Historique illimité</li>
+            <li>Support WhatsApp prioritaire</li>
+          </ul>
+          <button class="btn-price btn-price-solid" onclick="ouvrirApp()">🚀 Essai gratuit 7 jours</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="testis">
+    <div class="sec-title">Ce qu'ils disent</div>
+    <div class="sec-sub">Des commerçants ivoiriens transformés par MonStock Pro</div>
+    <div class="testi-grid">
+      <div class="testi"><div class="testi-stars">★★★★★</div><div class="testi-txt">Avant je ne savais pas si je gagnais vraiment. Maintenant je vois tout en temps réel. J'ai augmenté mon bénéfice de 30% en 2 mois.</div><div class="testi-name">Mariam K.</div><div class="testi-role">Boutique cosmétique · Aboisso</div></div>
+      <div class="testi"><div class="testi-stars">★★★★★</div><div class="testi-txt">L'IA m'a conseillé de commander plus de riz avant les fêtes. J'ai suivi le conseil et j'ai fait mon meilleur mois de l'année !</div><div class="testi-name">Kofi A.</div><div class="testi-role">Mini-supermarché · Abidjan Cocody</div></div>
+      <div class="testi"><div class="testi-stars">★★★★★</div><div class="testi-txt">Très simple à utiliser. Même sans connaissance informatique on s'y retrouve facilement. Je recommande à tous les commerçants.</div><div class="testi-name">Ama S.</div><div class="testi-role">Maquis · Adjamé</div></div>
+    </div>
+  </div>
+
+  <div class="lp-cta">
+    <h2>Prêt à connaître vos vrais bénéfices ?</h2>
+    <p>Rejoignez des centaines de commerçants ivoiriens qui utilisent MonStock Pro</p>
+    <button class="btn-hero" onclick="ouvrirApp()">🚀 Commencer gratuitement</button>
+  </div>
+  <div class="lp-footer">© 2026 MonStock Pro · Fait avec ❤️ pour la Côte d'Ivoire · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b3d0dcddc7d2d0c7f3dedcddc0c7dcd0d8c3c1dc9dd0da">[email&#160;protected]</a></div>
+</div>
+
+<!-- ======= APP ======= -->
+<div id="app">
+  <div class="app-bar">
+    <div class="app-logo">MonStock<em> Pro</em></div>
+    <div class="app-spacer"></div>
+    <div class="app-date" id="app-date"></div>
+    <button class="btn-back no-print" onclick="retourLanding()" style="margin-left:10px;">🏠 Accueil</button>
+    <div class="app-av">M</div>
+  </div>
+
+  <div class="tabs no-print">
+    <div class="tab on" onclick="showTab('dashboard',this)">📊 Dashboard</div>
+    <div class="tab" onclick="showTab('produits',this)">📦 Produits</div>
+    <div class="tab" onclick="showTab('ventes',this)">🛒 Ventes</div>
+    <div class="tab" onclick="showTab('historique',this)">📋 Historique</div>
+    <div class="tab" onclick="showTab('alertes',this)">⚠️ Alertes <span class="tbadge" id="alertBadge">0</span></div>
+    <div class="tab" onclick="showTab('benefice',this)">💰 Bénéfices</div>
+    <div class="tab ai-tab" onclick="showTab('ia',this)">🤖 IA Conseillère</div>
+    <div class="tab" onclick="showTab('export',this)">📄 Export PDF</div>
+  </div>
+
+  <div class="app-body">
+
+    <!-- DASHBOARD -->
+    <div class="sec on" id="sec-dashboard">
+      <div class="sgrid">
+        <div class="sc"><div class="sc-lbl">Chiffre d'affaires</div><div class="sc-val" id="d-ca" style="color:var(--green)">0</div><div class="sc-unit">FCFA total</div></div>
+        <div class="sc"><div class="sc-lbl">Bénéfice net</div><div class="sc-val" id="d-benef" style="color:var(--gold)">0</div><div class="sc-unit">FCFA profit</div></div>
+        <div class="sc"><div class="sc-lbl">Produits</div><div class="sc-val" id="d-nprod" style="color:#333">0</div><div class="sc-unit">références</div></div>
+        <div class="sc"><div class="sc-lbl">Alertes stock</div><div class="sc-val" id="d-alrt" style="color:var(--red)">0</div><div class="sc-unit">à réapprovisionner</div></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">⚡ Dernières ventes</div></div>
+        <div class="tw"><table><thead><tr><th>Produit</th><th>Qté</th><th>Recette</th><th>Bénéfice</th><th>Date</th></tr></thead><tbody id="d-tbody"></tbody></table></div>
+        <div class="empty" id="d-empty"><div class="empty-ico">🛒</div><p>Aucune vente enregistrée.<br><small>Allez dans Ventes pour enregistrer votre première vente.</small></p></div>
+      </div>
+    </div>
+
+    <!-- PRODUITS -->
+    <div class="sec" id="sec-produits">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">➕ Ajouter un produit</div></div>
+        <div class="fg"><label>Nom du produit *</label><input type="text" id="p-nom" placeholder="Ex: Savon Noir 200g"></div>
+        <div class="fg2">
+          <div class="fg"><label>Prix d'achat (FCFA) *</label><input type="number" id="p-achat" placeholder="Ex: 500" min="0"></div>
+          <div class="fg"><label>Prix de vente (FCFA) *</label><input type="number" id="p-vente" placeholder="Ex: 800" min="0"></div>
+          <div class="fg"><label>Quantité en stock *</label><input type="number" id="p-qte" placeholder="Ex: 50" min="0"></div>
+          <div class="fg"><label>Seuil alerte stock</label><input type="number" id="p-alerte" placeholder="Ex: 5" value="5" min="1"></div>
+        </div>
+        <button class="btn btn-g" onclick="ajouterProduit()">➕ Ajouter le produit</button>
+      </div>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title">📦 Mes produits (<span id="prod-count">0</span>)</div>
+          <input type="text" id="prod-search" placeholder="🔍 Rechercher..." oninput="renderProduits()" style="max-width:200px;padding:7px 12px;font-size:12px;">
+        </div>
+        <div class="tw"><table><thead><tr><th>Produit</th><th>P. Achat</th><th>P. Vente</th><th>Marge</th><th>Stock</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="prod-tbody"></tbody></table></div>
+        <div class="empty" id="prod-empty"><div class="empty-ico">📦</div><p>Aucun produit.<br><small>Ajoutez votre premier produit ci-dessus.</small></p></div>
+      </div>
+    </div>
+
+    <!-- VENTES -->
+    <div class="sec" id="sec-ventes">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">🛒 Enregistrer une vente</div></div>
+        <div class="fg3">
+          <div class="fg"><label>Produit</label><select id="v-produit" onchange="onProdSelect()"><option value="">— Choisir un produit —</option></select></div>
+          <div class="fg"><label>Quantité vendue</label><input type="number" id="v-qte" placeholder="Ex: 3" min="1"></div>
+          <div class="fg"><label>&nbsp;</label><button class="btn btn-gold" onclick="enregistrerVente()">✅ Valider la vente</button></div>
+        </div>
+        <div id="v-preview" style="display:none;margin-top:12px;background:var(--green3);border:1px solid #b8dfc9;border-radius:9px;padding:12px;font-size:13px;"></div>
+      </div>
+      <div class="sgrid">
+        <div class="sc"><div class="sc-lbl">CA aujourd'hui</div><div class="sc-val" id="v-ca-t" style="color:var(--green)">0</div><div class="sc-unit">FCFA</div></div>
+        <div class="sc"><div class="sc-lbl">Bénéfice aujourd'hui</div><div class="sc-val" id="v-b-t" style="color:var(--gold)">0</div><div class="sc-unit">FCFA</div></div>
+        <div class="sc"><div class="sc-lbl">Ventes aujourd'hui</div><div class="sc-val" id="v-n-t" style="color:#333">0</div><div class="sc-unit">transactions</div></div>
+        <div class="sc"><div class="sc-lbl">Top produit</div><div class="sc-val" id="v-top" style="font-size:13px;color:var(--orange)">—</div><div class="sc-unit">ce mois</div></div>
+      </div>
+    </div>
+
+    <!-- HISTORIQUE -->
+    <div class="sec" id="sec-historique">
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title">📋 Historique des ventes</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <input type="text" id="hist-q" placeholder="🔍 Rechercher..." oninput="renderHistorique()" style="max-width:180px;padding:7px 12px;font-size:12px;">
+            <button class="btn btn-r btn-sm no-print" onclick="clearHist()">🗑️ Effacer tout</button>
+          </div>
+        </div>
+        <div class="tw"><table><thead><tr><th>Date &amp; Heure</th><th>Produit</th><th>Qté</th><th>Recette</th><th>Bénéfice</th></tr></thead><tbody id="hist-tbody"></tbody></table></div>
+        <div class="empty" id="hist-empty"><div class="empty-ico">📋</div><p>Aucune vente dans l'historique.</p></div>
+      </div>
+    </div>
+
+    <!-- ALERTES -->
+    <div class="sec" id="sec-alertes">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">⚠️ Produits à réapprovisionner</div></div>
+        <div id="alertes-list"></div>
+        <div class="empty" id="alertes-empty"><div class="empty-ico">✅</div><p>Tous vos stocks sont à niveau !</p></div>
+      </div>
+    </div>
+
+    <!-- BENEFICES -->
+    <div class="sec" id="sec-benefice">
+      <div class="bh">
+        <div><div class="bh-lbl">💰 Bénéfice Total</div><div class="bh-val" id="b-total">0 F</div><div class="bh-sub">Toutes ventes confondues</div></div>
+        <div><div class="bh-lbl">📈 Chiffre d'affaires</div><div class="bh-val" id="b-ca">0 F</div><div class="bh-sub">Recettes brutes totales</div></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">📊 Bénéfice par produit</div></div>
+        <div class="tw"><table><thead><tr><th>Produit</th><th>Qté vendue</th><th>Recette</th><th>Coût total</th><th>Bénéfice</th><th>Marge %</th></tr></thead><tbody id="benef-tbody"></tbody></table></div>
+        <div class="empty" id="benef-empty"><div class="empty-ico">💰</div><p>Aucune vente enregistrée.</p></div>
+      </div>
+    </div>
+
+    <!-- IA -->
+    <div class="sec" id="sec-ia">
+      <div class="ai-bar">
+        <div class="ai-orb">🤖</div>
+        <div class="ai-bar-txt">
+          <h3>IA Conseillère MonStock</h3>
+          <p>Analyse de vos données en temps réel · Conseils personnalisés pour votre boutique</p>
+        </div>
+        <button class="btn btn-sm no-print" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);margin-left:auto;" onclick="lancerAnalyse()">🔄 Rafraîchir</button>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">💡 Analyse automatique</div></div>
+        <div id="ia-insights"></div>
+        <div id="ia-loading" style="display:none;"><div class="ai-dots"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div><p style="text-align:center;font-size:13px;color:var(--muted);padding-bottom:20px;">Analyse en cours...</p></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">💬 Posez une question à l'IA</div></div>
+        <div class="chat-wrap">
+          <div class="chat-msgs" id="chat-msgs">
+            <div class="msg msg-bot"><strong>🤖 IA MonStock :</strong> Bonjour ! Je connais vos produits et ventes. Posez-moi n'importe quelle question sur votre boutique !</div>
+          </div>
+          <div class="chat-row">
+            <input type="text" id="chat-input" placeholder="Ex: Quel produit me rapporte le plus ?" onkeydown="if(event.key==='Enter')envoyerChat()">
+            <button class="btn-send" onclick="envoyerChat()">Envoyer ▶</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPORT -->
+    <div class="sec" id="sec-export">
+      <div class="card">
+        <div class="card-hd"><div class="card-title">📄 Générer un rapport PDF</div></div>
+        <div class="fg2">
+          <div class="fg"><label>Nom de la boutique</label><input type="text" id="pdf-boutique" placeholder="Ex: Boutique Mariam"></div>
+          <div class="fg"><label>Période</label>
+            <select id="pdf-periode">
+              <option value="all">Tout l'historique</option>
+              <option value="today">Aujourd'hui</option>
+              <option value="week">Cette semaine</option>
+              <option value="month">Ce mois</option>
+            </select>
+          </div>
+          <div class="fg"><label>Type de rapport</label>
+            <select id="pdf-type">
+              <option value="complet">Rapport complet</option>
+              <option value="ventes">Ventes uniquement</option>
+              <option value="stock">Stock uniquement</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-g" onclick="exporterPDF()">📄 Générer le rapport</button>
+          <button class="btn btn-out no-print" onclick="window.print()">🖨️ Imprimer / Sauvegarder PDF</button>
+        </div>
+      </div>
+      <div class="card export-preview" id="pdf-preview-card">
+        <div class="card-hd"><div class="card-title">👁️ Aperçu du rapport</div></div>
+        <div id="pdf-content"><div class="empty"><div class="empty-ico">📄</div><p>Cliquez sur "Générer le rapport" pour voir l'aperçu.</p></div></div>
+      </div>
+    </div>
+
+  </div><!-- /app-body -->
+</div><!-- /app -->
+
+<!-- MODAL MODIFIER -->
+<div class="overlay" id="modal-edit" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-title">✏️ Modifier le produit</div>
+    <div class="fg"><label>Nom du produit</label><input type="text" id="e-nom"></div>
+    <div class="fg2">
+      <div class="fg"><label>Prix d'achat (FCFA)</label><input type="number" id="e-achat" min="0"></div>
+      <div class="fg"><label>Prix de vente (FCFA)</label><input type="number" id="e-vente" min="0"></div>
+      <div class="fg"><label>Stock actuel</label><input type="number" id="e-qte" min="0"></div>
+      <div class="fg"><label>Seuil alerte</label><input type="number" id="e-alerte" min="1"></div>
+    </div>
+    <input type="hidden" id="e-id">
+    <div class="modal-foot">
+      <button class="btn btn-r" onclick="document.getElementById('modal-edit').classList.remove('open')">Annuler</button>
+      <button class="btn btn-g" onclick="sauvegarderEdit()">💾 Sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ======= DATA ======= */
+var produits = JSON.parse(localStorage.getItem('msp_p') || '[]');
+var ventes   = JSON.parse(localStorage.getItem('msp_v') || '[]');
+
+function save() {
+  localStorage.setItem('msp_p', JSON.stringify(produits));
+  localStorage.setItem('msp_v', JSON.stringify(ventes));
+}
+
+/* ======= UTILS ======= */
+function fmt(n) { return Math.round(n).toLocaleString('fr-FR'); }
+function fmtD(d) { return new Date(d).toLocaleDateString('fr-FR', {day:'2-digit',month:'short',year:'numeric'}); }
+function fmtDT(d) { return new Date(d).toLocaleString('fr-FR', {day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}); }
+function todayStr() { return new Date().toDateString(); }
+
+document.getElementById('app-date').textContent = new Date().toLocaleDateString('fr-FR', {weekday:'long',day:'numeric',month:'long'});
+
+/* ======= LANDING <-> APP ======= */
+function scrollToEl(id) { document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+function ouvrirApp() {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  renderAll();
+}
+function retourLanding() {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('landing').style.display = 'block';
+}
+
+/* ======= TOAST ======= */
+function toast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type ? ' ' + type : '');
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 3000);
+}
+
+/* ======= TABS ======= */
+function showTab(id, el) {
+  document.querySelectorAll('.sec').forEach(function(s) { s.classList.remove('on'); });
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('on'); });
+  document.getElementById('sec-' + id).classList.add('on');
+  el.classList.add('on');
+  if (id === 'ia') lancerAnalyse();
+  renderAll();
+}
+
+/* ======= PRODUITS ======= */
+function ajouterProduit() {
+  var nom   = document.getElementById('p-nom').value.trim();
+  var achat = parseFloat(document.getElementById('p-achat').value);
+  var vente = parseFloat(document.getElementById('p-vente').value);
+  var qte   = parseInt(document.getElementById('p-qte').value);
+  var alerte= parseInt(document.getElementById('p-alerte').value) || 5;
+  if (!nom)              { toast('Entrez un nom de produit', 'err'); return; }
+  if (isNaN(achat) || achat < 0) { toast('Prix d\'achat invalide', 'err'); return; }
+  if (isNaN(vente) || vente < 0) { toast('Prix de vente invalide', 'err'); return; }
+  if (isNaN(qte)   || qte < 0)   { toast('Quantité invalide', 'err'); return; }
+  produits.push({ id: Date.now(), nom: nom, achat: achat, vente: vente, qte: qte, alerte: alerte });
+  save();
+  document.getElementById('p-nom').value = '';
+  document.getElementById('p-achat').value = '';
+  document.getElementById('p-vente').value = '';
+  document.getElementById('p-qte').value = '';
+  document.getElementById('p-alerte').value = '5';
+  toast('✅ Produit ajouté : ' + nom);
+  renderAll();
+}
+
+function renderProduits() {
+  var q = (document.getElementById('prod-search').value || '').toLowerCase();
+  var list = produits.filter(function(p) { return p.nom.toLowerCase().includes(q); });
+  document.getElementById('prod-count').textContent = produits.length;
+  var tbody = document.getElementById('prod-tbody');
+  var empty = document.getElementById('prod-empty');
+  tbody.innerHTML = '';
+  if (!list.length) { empty.style.display = ''; tbody.parentElement.style.display = 'none'; return; }
+  empty.style.display = 'none'; tbody.parentElement.style.display = '';
+  list.forEach(function(p) {
+    var m = p.vente - p.achat;
+    var mp = p.achat > 0 ? ((m / p.achat) * 100).toFixed(0) : 0;
+    var badge = p.qte === 0 ? '<span class="badge b-red">🔴 Rupture</span>' : p.qte <= p.alerte ? '<span class="badge b-warn">🟡 Faible</span>' : '<span class="badge b-ok">🟢 OK</span>';
+    tbody.innerHTML += '<tr>' +
+      '<td><strong>' + p.nom + '</strong></td>' +
+      '<td>' + fmt(p.achat) + ' F</td>' +
+      '<td>' + fmt(p.vente) + ' F</td>' +
+      '<td style="color:' + (m >= 0 ? 'var(--green)' : 'var(--red)') + '">+' + fmt(m) + ' F (' + mp + '%)</td>' +
+      '<td><strong>' + p.qte + '</strong></td>' +
+      '<td>' + badge + '</td>' +
+      '<td><div style="display:flex;gap:6px;">' +
+        '<button class="btn btn-out btn-sm" onclick="ouvrirEdit(' + p.id + ')">✏️</button>' +
+        '<button class="btn btn-r btn-sm" onclick="supprimerProduit(' + p.id + ')">🗑️</button>' +
+      '</div></td>' +
+    '</tr>';
+  });
+}
+
+function supprimerProduit(id) {
+  if (!confirm('Supprimer ce produit ?')) return;
+  produits = produits.filter(function(p) { return p.id !== id; });
+  save(); toast('🗑️ Produit supprimé'); renderAll();
+}
+
+function ouvrirEdit(id) {
+  var p = produits.find(function(x) { return x.id === id; });
+  if (!p) return;
+  document.getElementById('e-id').value = id;
+  document.getElementById('e-nom').value = p.nom;
+  document.getElementById('e-achat').value = p.achat;
+  document.getElementById('e-vente').value = p.vente;
+  document.getElementById('e-qte').value = p.qte;
+  document.getElementById('e-alerte').value = p.alerte;
+  document.getElementById('modal-edit').classList.add('open');
+}
+
+function sauvegarderEdit() {
+  var id = parseInt(document.getElementById('e-id').value);
+  var p = produits.find(function(x) { return x.id === id; });
+  if (!p) return;
+  p.nom    = document.getElementById('e-nom').value.trim() || p.nom;
+  p.achat  = parseFloat(document.getElementById('e-achat').value) || p.achat;
+  p.vente  = parseFloat(document.getElementById('e-vente').value) || p.vente;
+  p.qte    = parseInt(document.getElementById('e-qte').value) || 0;
+  p.alerte = parseInt(document.getElementById('e-alerte').value) || 5;
+  save();
+  document.getElementById('modal-edit').classList.remove('open');
+  toast('✅ Produit modifié'); renderAll();
+}
+
+/* ======= VENTES ======= */
+function updateVenteSelect() {
+  var sel = document.getElementById('v-produit');
+  var cur = sel.value;
+  sel.innerHTML = '<option value="">— Choisir un produit —</option>';
+  produits.forEach(function(p) {
+    sel.innerHTML += '<option value="' + p.id + '">' + p.nom + ' (stock: ' + p.qte + ')</option>';
+  });
+  if (cur) sel.value = cur;
+}
+
+function onProdSelect() {
+  var pid = parseInt(document.getElementById('v-produit').value);
+  var p = produits.find(function(x) { return x.id === pid; });
+  var prev = document.getElementById('v-preview');
+  if (p) {
+    prev.style.display = 'block';
+    prev.innerHTML = '💰 Vente : <strong>' + fmt(p.vente) + ' FCFA</strong> &nbsp;·&nbsp; Achat : <strong>' + fmt(p.achat) + ' FCFA</strong> &nbsp;·&nbsp; Marge : <strong style="color:var(--green)">+' + fmt(p.vente - p.achat) + ' FCFA</strong> &nbsp;·&nbsp; Stock : <strong>' + p.qte + '</strong>';
+  } else { prev.style.display = 'none'; }
+}
+
+function enregistrerVente() {
+  var pid = parseInt(document.getElementById('v-produit').value);
+  var qte = parseInt(document.getElementById('v-qte').value);
+  if (!pid) { toast('Choisissez un produit', 'err'); return; }
+  if (!qte || qte < 1) { toast('Quantité invalide', 'err'); return; }
+  var p = produits.find(function(x) { return x.id === pid; });
+  if (!p) { toast('Produit introuvable', 'err'); return; }
+  if (qte > p.qte) { toast('Stock insuffisant ! Reste : ' + p.qte + ' unités', 'err'); return; }
+  var recette = qte * p.vente;
+  var cout    = qte * p.achat;
+  var benef   = recette - cout;
+  p.qte -= qte;
+  ventes.push({ id: Date.now(), produit: p.nom, qte: qte, recette: recette, cout: cout, benef: benef, date: new Date().toISOString() });
+  save();
+  document.getElementById('v-qte').value = '';
+  document.getElementById('v-preview').style.display = 'none';
+  toast('✅ ' + qte + 'x ' + p.nom + ' → +' + fmt(benef) + ' FCFA de bénéfice');
+  renderAll();
+}
+
+/* ======= HISTORIQUE ======= */
+function renderHistorique() {
+  var q = (document.getElementById('hist-q').value || '').toLowerCase();
+  var list = ventes.filter(function(v) { return v.produit.toLowerCase().includes(q); }).slice().reverse();
+  var tbody = document.getElementById('hist-tbody');
+  var empty = document.getElementById('hist-empty');
+  tbody.innerHTML = '';
+  if (!list.length) { empty.style.display = ''; tbody.parentElement.style.display = 'none'; return; }
+  empty.style.display = 'none'; tbody.parentElement.style.display = '';
+  list.forEach(function(v) {
+    tbody.innerHTML += '<tr>' +
+      '<td style="color:var(--muted);font-size:12px;">' + fmtDT(v.date) + '</td>' +
+      '<td>' + v.produit + '</td>' +
+      '<td>' + v.qte + '</td>' +
+      '<td>' + fmt(v.recette) + ' F</td>' +
+      '<td style="color:var(--green);font-weight:700;">+' + fmt(v.benef) + ' F</td>' +
+    '</tr>';
+  });
+}
+
+function clearHist() {
+  if (!confirm('Effacer tout l\'historique des ventes ?')) return;
+  ventes = []; save(); toast('🗑️ Historique effacé'); renderAll();
+}
+
+/* ======= ALERTES ======= */
+function renderAlertes() {
+  var alerts = produits.filter(function(p) { return p.qte <= p.alerte; });
+  document.getElementById('alertBadge').textContent = alerts.length;
+  document.getElementById('d-alrt').textContent = alerts.length;
+  var list = document.getElementById('alertes-list');
+  var empty = document.getElementById('alertes-empty');
+  list.innerHTML = '';
+  if (!alerts.length) { empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  alerts.sort(function(a,b) { return a.qte - b.qte; }).forEach(function(p) {
+    var crit = p.qte === 0;
+    list.innerHTML += '<div class="alert-item ' + (crit ? 'crit' : '') + '">' +
+      '<div class="alert-ico">' + (crit ? '🔴' : '🟡') + '</div>' +
+      '<div class="alert-body"><strong>' + p.nom + '</strong><span>' + (crit ? 'RUPTURE DE STOCK — Plus aucune unité !' : 'Il reste ' + p.qte + ' unité(s). Seuil : ' + p.alerte) + '</span></div>' +
+      '<button class="btn btn-g btn-sm no-print" onclick="ouvrirEdit(' + p.id + ')">📥 Réappro</button>' +
+    '</div>';
+  });
+}
+
+/* ======= BÉNÉFICES ======= */
+function renderBenefices() {
+  var ca = ventes.reduce(function(s,v) { return s + v.recette; }, 0);
+  var benef = ventes.reduce(function(s,v) { return s + v.benef; }, 0);
+  document.getElementById('b-total').textContent = fmt(benef) + ' F';
+  document.getElementById('b-ca').textContent = fmt(ca) + ' F';
+  var map = {};
+  ventes.forEach(function(v) {
+    if (!map[v.produit]) map[v.produit] = { qte:0, recette:0, cout:0, benef:0 };
+    map[v.produit].qte += v.qte;
+    map[v.produit].recette += v.recette;
+    map[v.produit].cout += v.cout;
+    map[v.produit].benef += v.benef;
+  });
+  var rows = Object.entries(map).sort(function(a,b) { return b[1].benef - a[1].benef; });
+  var tbody = document.getElementById('benef-tbody');
+  var empty = document.getElementById('benef-empty');
+  tbody.innerHTML = '';
+  if (!rows.length) { empty.style.display = ''; tbody.parentElement.style.display = 'none'; return; }
+  empty.style.display = 'none'; tbody.parentElement.style.display = '';
+  rows.forEach(function(r) {
+    var n = r[0], d = r[1];
+    var mp = d.cout > 0 ? ((d.benef / d.cout) * 100).toFixed(1) : 0;
+    tbody.innerHTML += '<tr>' +
+      '<td><strong>' + n + '</strong></td>' +
+      '<td>' + d.qte + '</td>' +
+      '<td>' + fmt(d.recette) + ' F</td>' +
+      '<td>' + fmt(d.cout) + ' F</td>' +
+      '<td style="color:var(--green);font-weight:800;">+' + fmt(d.benef) + ' F</td>' +
+      '<td>' + mp + '%</td>' +
+    '</tr>';
+  });
+}
+
+/* ======= DASHBOARD ======= */
+function renderDashboard() {
+  var ca = ventes.reduce(function(s,v) { return s + v.recette; }, 0);
+  var benef = ventes.reduce(function(s,v) { return s + v.benef; }, 0);
+  document.getElementById('d-ca').textContent = fmt(ca);
+  document.getElementById('d-benef').textContent = fmt(benef);
+  document.getElementById('d-nprod').textContent = produits.length;
+  var today = new Date().toDateString();
+  var todayV = ventes.filter(function(v) { return new Date(v.date).toDateString() === today; });
+  document.getElementById('v-ca-t').textContent = fmt(todayV.reduce(function(s,v) { return s + v.recette; }, 0));
+  document.getElementById('v-b-t').textContent = fmt(todayV.reduce(function(s,v) { return s + v.benef; }, 0));
+  document.getElementById('v-n-t').textContent = todayV.length;
+  var map = {};
+  ventes.forEach(function(v) { map[v.produit] = (map[v.produit] || 0) + v.qte; });
+  var top = Object.entries(map).sort(function(a,b) { return b[1] - a[1]; })[0];
+  document.getElementById('v-top').textContent = top ? top[0] : '—';
+  var recent = ventes.slice(-8).reverse();
+  var tbody = document.getElementById('d-tbody');
+  var empty = document.getElementById('d-empty');
+  tbody.innerHTML = '';
+  if (!recent.length) { empty.style.display = ''; tbody.parentElement.style.display = 'none'; return; }
+  empty.style.display = 'none'; tbody.parentElement.style.display = '';
+  recent.forEach(function(v) {
+    tbody.innerHTML += '<tr><td>' + v.produit + '</td><td>' + v.qte + '</td><td>' + fmt(v.recette) + ' F</td><td style="color:var(--green);font-weight:700;">+' + fmt(v.benef) + ' F</td><td style="color:var(--muted);font-size:12px;">' + fmtDT(v.date) + '</td></tr>';
+  });
+}
+
+/* ======= IA ANALYSE ======= */
+function genererInsights() {
+  var insights = [];
+  var ca = ventes.reduce(function(s,v) { return s + v.recette; }, 0);
+  var benef = ventes.reduce(function(s,v) { return s + v.benef; }, 0);
+  var marge = ca > 0 ? (benef / ca * 100).toFixed(1) : 0;
+  var mapB = {};
+  ventes.forEach(function(v) {
+    if (!mapB[v.produit]) mapB[v.produit] = { benef:0, qte:0, recette:0, cout:0 };
+    mapB[v.produit].benef += v.benef;
+    mapB[v.produit].qte += v.qte;
+    mapB[v.produit].recette += v.recette;
+    mapB[v.produit].cout += v.cout;
+  });
+
+  // Ruptures
+  var ruptures = produits.filter(function(p) { return p.qte === 0; });
+  if (ruptures.length > 0) {
+    insights.push({ ico:'🔴', cls:'ico-r', tag:'tag-a', tagL:'Action urgente',
+      titre: ruptures.length + ' produit(s) en rupture de stock',
+      texte: ruptures.map(function(p){return p.nom;}).join(', ') + ' — Chaque jour sans stock = argent perdu. Réapprovisionnez immédiatement.'
+    });
+  }
+  // Stock faible
+  var faibles = produits.filter(function(p) { return p.qte > 0 && p.qte <= p.alerte; });
+  if (faibles.length > 0) {
+    insights.push({ ico:'🟡', cls:'ico-gold', tag:'tag-a', tagL:'À surveiller',
+      titre: faibles.length + ' produit(s) bientôt épuisé(s)',
+      texte: faibles.map(function(p){return p.nom+' ('+p.qte+' restants)';}).join(', ') + '. Commandez avant d\'être en rupture.'
+    });
+  }
+  // Produits jamais vendus
+  var venduNoms = ventes.map(function(v){return v.produit;});
+  var sansventes = produits.filter(function(p) { return !venduNoms.includes(p.nom); });
+  if (sansventes.length > 0) {
+    insights.push({ ico:'📦', cls:'ico-r', tag:'tag-t', tagL:'Conseil',
+      titre: sansventes.length + ' produit(s) jamais vendu(s)',
+      texte: sansventes.map(function(p){return p.nom;}).join(', ') + ' — Mettez-les en promotion, placez-les en vitrine, ou vérifiez si le prix n\'est pas trop élevé.'
+    });
+  }
+  // Marge globale
+  if (ca > 0) {
+    if (parseFloat(marge) < 20) {
+      insights.push({ ico:'⚠️', cls:'ico-gold', tag:'tag-a', tagL:'Marge faible',
+        titre: 'Marge globale de ' + marge + '% — En dessous de 20%',
+        texte: 'Pour améliorer : négociez de meilleurs prix d\'achat avec vos fournisseurs, ou augmentez légèrement vos prix de vente sur les produits très demandés.'
+      });
+    } else {
+      insights.push({ ico:'📈', cls:'ico-g', tag:'tag-s', tagL:'Bonne santé',
+        titre: 'Excellente marge globale : ' + marge + '%',
+        texte: 'Votre marge est saine. Continuez à surveiller les produits les moins rentables et focalisez-vous sur ceux qui rapportent le plus.'
+      });
+    }
+  }
+  // Top produit
+  var topArr = Object.entries(mapB).sort(function(a,b){return b[1].benef-a[1].benef;});
+  if (topArr.length > 0) {
+    var topB = topArr[0];
+    insights.push({ ico:'🏆', cls:'ico-g', tag:'tag-s', tagL:'Top performance',
+      titre: 'Champion : "' + topB[0] + '" vous rapporte le plus',
+      texte: 'Ce produit vous a rapporté ' + fmt(topB[1].benef) + ' FCFA de bénéfice. Assurez-vous de toujours l\'avoir en stock — c\'est votre vache à lait !'
+    });
+  }
+  // Moins rentable
+  if (topArr.length > 1) {
+    var botB = topArr[topArr.length - 1];
+    var mpct = botB[1].recette > 0 ? (botB[1].benef / botB[1].recette * 100).toFixed(1) : 0;
+    insights.push({ ico:'📉', cls:'ico-r', tag:'tag-t', tagL:'À revoir',
+      titre: '"' + botB[0] + '" est le moins rentable',
+      texte: 'Marge de ' + mpct + '% sur ce produit. Envisagez d\'augmenter son prix de vente ou de le remplacer par quelque chose de plus rentable.'
+    });
+  }
+  // Démarrage si pas de données
+  if (produits.length === 0) {
+    insights.push({ ico:'💡', cls:'ico-b', tag:'tag-i', tagL:'Démarrage',
+      titre: 'Commencez par ajouter vos produits',
+      texte: 'Allez dans l\'onglet "Produits" et ajoutez tous vos produits avec leurs prix d\'achat et de vente. L\'IA pourra ensuite analyser vos performances.'
+    });
+  } else if (ventes.length === 0) {
+    insights.push({ ico:'🛒', cls:'ico-b', tag:'tag-i', tagL:'Prochaine étape',
+      titre: 'Enregistrez vos premières ventes',
+      texte: 'Vos produits sont prêts ! À chaque vente, enregistrez-la dans l\'onglet "Ventes". L\'IA analysera vos données dès que vous avez des ventes.'
+    });
+  }
+  // Conseil horaire
+  var h = new Date().getHours();
+  if (h >= 6 && h < 10) {
+    insights.push({ ico:'☀️', cls:'ico-gold', tag:'tag-t', tagL:'Conseil du matin',
+      titre: 'Bonne journée ! Vérifiez votre stock d\'abord',
+      texte: 'Avant d\'ouvrir, consultez les alertes de stock. Un produit en rupture au début de la journée = clients perdus.'
+    });
+  } else if (h >= 18) {
+    insights.push({ ico:'🌙', cls:'ico-b', tag:'tag-i', tagL:'Bilan du soir',
+      titre: 'C\'est le moment de faire le bilan',
+      texte: 'Consultez votre bénéfice du jour dans l\'onglet Bénéfices. Comparez avec hier. C\'est en mesurant chaque jour qu\'on progresse !'
+    });
+  }
+  return insights;
+}
+
+function lancerAnalyse() {
+  var container = document.getElementById('ia-insights');
+  var loading = document.getElementById('ia-loading');
+  container.innerHTML = '';
+  loading.style.display = 'block';
+  setTimeout(function() {
+    loading.style.display = 'none';
+    var insights = genererInsights();
+    if (!insights.length) {
+      container.innerHTML = '<div class="empty"><div class="empty-ico">🤖</div><p>Ajoutez des produits et des ventes pour recevoir des conseils personnalisés !</p></div>';
+      return;
+    }
+    insights.forEach(function(ins) {
+      container.innerHTML += '<div class="ai-insight">' +
+        '<div class="ai-ico ' + ins.cls + '">' + ins.ico + '</div>' +
+        '<div class="ai-body">' +
+          '<div class="ai-ttl">' + ins.titre + '</div>' +
+          '<div class="ai-txt">' + ins.texte + '</div>' +
+          '<span class="ai-tag ' + ins.tag + '">' + ins.tagL + '</span>' +
+        '</div>' +
+      '</div>';
+    });
+  }, 1000);
+}
+
+/* ======= CHAT IA (Claude API) ======= */
+var chatHistory = [];
+
+function getContextIA() {
+  var ca = ventes.reduce(function(s,v){return s+v.recette;},0);
+  var benef = ventes.reduce(function(s,v){return s+v.benef;},0);
+  var marge = ca > 0 ? (benef/ca*100).toFixed(1) : 0;
+  var mapB = {};
+  ventes.forEach(function(v){
+    if(!mapB[v.produit])mapB[v.produit]={benef:0,qte:0,recette:0};
+    mapB[v.produit].benef+=v.benef; mapB[v.produit].qte+=v.qte; mapB[v.produit].recette+=v.recette;
+  });
+  var topArr = Object.entries(mapB).sort(function(a,b){return b[1].benef-a[1].benef;});
+  var ruptures = produits.filter(function(p){return p.qte===0;});
+  var faibles = produits.filter(function(p){return p.qte>0&&p.qte<=p.alerte;});
+
+  return [
+    '=== DONNÉES DE LA BOUTIQUE ===',
+    'Produits (' + produits.length + ') : ' + produits.map(function(p){return p.nom+' (stock:'+p.qte+', achat:'+p.achat+'F, vente:'+p.vente+'F)';}).join(' | '),
+    'Ventes totales : ' + ventes.length + ' transactions',
+    'Chiffre d\'affaires total : ' + fmt(ca) + ' FCFA',
+    'Bénéfice net total : ' + fmt(benef) + ' FCFA',
+    'Marge globale : ' + marge + '%',
+    'Top produits par bénéfice : ' + topArr.slice(0,3).map(function(x){return x[0]+' (+'+fmt(x[1].benef)+'F)';}).join(', '),
+    'Ruptures de stock : ' + (ruptures.length ? ruptures.map(function(p){return p.nom;}).join(', ') : 'aucune'),
+    'Stock faible : ' + (faibles.length ? faibles.map(function(p){return p.nom+'('+p.qte+')';}).join(', ') : 'aucun'),
+    '=================================',
+    'Tu es l\'IA Conseillère de MonStock Pro, spécialisée dans l\'aide aux commerçants ivoiriens.',
+    'Réponds en français, de façon concise, pratique et bienveillante. Utilise les données ci-dessus pour personnaliser tes conseils.',
+    'Utilise du HTML simple (<strong>, <em>) pour mettre en valeur les chiffres importants.'
+  ].join('\n');
+}
+
+function envoyerChat() {
+  var input = document.getElementById('chat-input');
+  var msg = input.value.trim();
+  if (!msg) return;
+  var msgs = document.getElementById('chat-msgs');
+  msgs.innerHTML += '<div class="msg msg-me">' + msg + '</div>';
+  input.value = '';
+  var tid = 'typing' + Date.now();
+  msgs.innerHTML += '<div class="msg msg-bot" id="' + tid + '"><em style="opacity:.5">🤖 En train d\'analyser...</em></div>';
+  msgs.scrollTop = msgs.scrollHeight;
+
+  // Ajouter message à l'historique
+  chatHistory.push({ role: 'user', content: msg });
+
+  // Appel à l'API Claude
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: getContextIA(),
+      messages: chatHistory
+    })
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    var rep = data.content && data.content[0] ? data.content[0].text : repChatIALocal(msg);
+    chatHistory.push({ role: 'assistant', content: rep });
+    var el = document.getElementById(tid);
+    if (el) el.outerHTML = '<div class="msg msg-bot"><strong>🤖 IA MonStock :</strong> ' + rep + '</div>';
+    msgs.scrollTop = msgs.scrollHeight;
+  })
+  .catch(function() {
+    // Fallback sur réponses locales si API indisponible
+    var rep = repChatIALocal(msg);
+    chatHistory.push({ role: 'assistant', content: rep });
+    var el = document.getElementById(tid);
+    if (el) el.outerHTML = '<div class="msg msg-bot"><strong>🤖 IA MonStock :</strong> ' + rep + '</div>';
+    msgs.scrollTop = msgs.scrollHeight;
+  });
+}
+
+function repChatIALocal(q) {
+  var ql = q.toLowerCase();
+  var ca = ventes.reduce(function(s,v){return s+v.recette;},0);
+  var benef = ventes.reduce(function(s,v){return s+v.benef;},0);
+  var marge = ca > 0 ? (benef/ca*100).toFixed(1) : 0;
+  var mapB = {};
+  ventes.forEach(function(v){
+    if(!mapB[v.produit])mapB[v.produit]={benef:0,qte:0};
+    mapB[v.produit].benef+=v.benef; mapB[v.produit].qte+=v.qte;
+  });
+  var topArr = Object.entries(mapB).sort(function(a,b){return b[1].benef-a[1].benef;});
+  if (ql.includes('bénéfice')||ql.includes('benefice')||ql.includes('gagn')) {
+    if (ca===0) return 'Vous n\'avez pas encore de ventes. Commencez par enregistrer vos ventes dans l\'onglet Ventes !';
+    return 'Votre bénéfice total est de <strong>'+fmt(benef)+' FCFA</strong> pour un CA de <strong>'+fmt(ca)+' FCFA</strong>. Marge : <strong>'+marge+'%</strong>.';
+  }
+  if (ql.includes('top')||ql.includes('meilleur')||ql.includes('rapporte')) {
+    if (!topArr.length) return 'Pas encore de ventes enregistrées.';
+    return 'Top produit : <strong>"'+topArr[0][0]+'"</strong> avec <strong>'+fmt(topArr[0][1].benef)+' FCFA</strong> de bénéfice.';
+  }
+  var ruptures = produits.filter(function(p){return p.qte===0;});
+  if (ql.includes('stock')||ql.includes('rupture')) {
+    if (!ruptures.length) return '✅ Tous vos stocks sont à niveau !';
+    return '<strong>'+ruptures.length+' produit(s) en rupture</strong> : '+ruptures.map(function(p){return p.nom;}).join(', ');
+  }
+  if (ql.includes('merci')) return 'Avec plaisir ! Je suis là pour vous aider 😊';
+  return 'Résumé : <strong>'+produits.length+' produits</strong>, <strong>'+ventes.length+' ventes</strong>, bénéfice : <strong>'+fmt(benef)+' FCFA</strong>. Posez une question précise !';
+}
+
+/* ======= EXPORT PDF ======= */
+function exporterPDF() {
+  var boutique = document.getElementById('pdf-boutique').value || 'Ma Boutique';
+  var periode  = document.getElementById('pdf-periode').value;
+  var type     = document.getElementById('pdf-type').value;
+  var fv = ventes;
+  var now = new Date();
+  if (periode === 'today') fv = ventes.filter(function(v){return new Date(v.date).toDateString()===now.toDateString();});
+  else if (periode === 'week') { var d7=new Date(); d7.setDate(d7.getDate()-7); fv=ventes.filter(function(v){return new Date(v.date)>=d7;}); }
+  else if (periode === 'month') { var dm=new Date(); dm.setMonth(dm.getMonth()-1); fv=ventes.filter(function(v){return new Date(v.date)>=dm;}); }
+  var ca    = fv.reduce(function(s,v){return s+v.recette;},0);
+  var benef = fv.reduce(function(s,v){return s+v.benef;},0);
+  var lp = {all:'Historique complet',today:'Aujourd\'hui',week:'7 derniers jours',month:'30 derniers jours'}[periode];
+
+  var html = '<div style="border:2px solid var(--green);border-radius:10px;padding:18px;margin-bottom:14px;background:var(--green3);">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">' +
+    '<div><div style="font-size:20px;font-weight:900;color:var(--green);">MonStock Pro</div><div style="font-size:12px;color:var(--muted);">Rapport de gestion commerciale</div></div>' +
+    '<div style="text-align:right;"><div style="font-size:16px;font-weight:700;">' + boutique + '</div><div style="font-size:12px;color:var(--muted);">Généré le ' + fmtD(new Date()) + '</div></div>' +
+    '</div><div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);">Période : <strong>' + lp + '</strong></div>' +
+    '</div>';
+
+  html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">' +
+    '<div style="background:#fff;border:1px solid var(--border);border-radius:9px;padding:13px;text-align:center;"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Chiffre d\'affaires</div><div style="font-size:22px;font-weight:900;color:var(--green);">' + fmt(ca) + ' F</div></div>' +
+    '<div style="background:#fff;border:1px solid var(--border);border-radius:9px;padding:13px;text-align:center;"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Bénéfice net</div><div style="font-size:22px;font-weight:900;color:var(--gold);">' + fmt(benef) + ' F</div></div>' +
+    '<div style="background:#fff;border:1px solid var(--border);border-radius:9px;padding:13px;text-align:center;"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Nombre de ventes</div><div style="font-size:22px;font-weight:900;">' + fv.length + '</div></div>' +
+    '</div>';
+
+  if (type === 'ventes' || type === 'complet') {
+    html += '<div style="margin-bottom:14px;"><div style="font-size:14px;font-weight:700;margin-bottom:8px;">Détail des ventes</div>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
+    html += '<thead><tr style="background:var(--green3);">';
+    ['Date','Produit','Qté','Recette','Bénéfice'].forEach(function(h){html += '<th style="padding:7px;text-align:left;border:1px solid var(--border);">' + h + '</th>';});
+    html += '</tr></thead><tbody>';
+    fv.slice().reverse().forEach(function(v){
+      html += '<tr><td style="padding:7px;border:1px solid var(--border);font-size:11px;">' + fmtDT(v.date) + '</td><td style="padding:7px;border:1px solid var(--border);">' + v.produit + '</td><td style="padding:7px;border:1px solid var(--border);">' + v.qte + '</td><td style="padding:7px;border:1px solid var(--border);">' + fmt(v.recette) + ' F</td><td style="padding:7px;border:1px solid var(--border);color:var(--green);font-weight:700;">+' + fmt(v.benef) + ' F</td></tr>';
+    });
+    if (!fv.length) html += '<tr><td colspan="5" style="padding:20px;text-align:center;color:var(--muted);border:1px solid var(--border);">Aucune vente sur cette période</td></tr>';
+    html += '</tbody></table></div>';
+  }
+  if (type === 'stock' || type === 'complet') {
+    html += '<div><div style="font-size:14px;font-weight:700;margin-bottom:8px;">État du stock</div>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
+    html += '<thead><tr style="background:var(--green3);">';
+    ['Produit','P. Achat','P. Vente','Marge','Stock','Statut'].forEach(function(h){html += '<th style="padding:7px;text-align:left;border:1px solid var(--border);">' + h + '</th>';});
+    html += '</tr></thead><tbody>';
+    produits.forEach(function(p){
+      html += '<tr><td style="padding:7px;border:1px solid var(--border);">' + p.nom + '</td><td style="padding:7px;border:1px solid var(--border);">' + fmt(p.achat) + ' F</td><td style="padding:7px;border:1px solid var(--border);">' + fmt(p.vente) + ' F</td><td style="padding:7px;border:1px solid var(--border);color:var(--green);">+' + fmt(p.vente-p.achat) + ' F</td><td style="padding:7px;border:1px solid var(--border);"><strong>' + p.qte + '</strong></td><td style="padding:7px;border:1px solid var(--border);">' + (p.qte===0?'🔴 Rupture':p.qte<=p.alerte?'🟡 Faible':'🟢 OK') + '</td></tr>';
+    });
+    if (!produits.length) html += '<tr><td colspan="6" style="padding:20px;text-align:center;color:var(--muted);border:1px solid var(--border);">Aucun produit</td></tr>';
+    html += '</tbody></table></div>';
+  }
+
+  document.getElementById('pdf-content').innerHTML = html;
+  toast('✅ Rapport généré ! Cliquez sur "Imprimer" pour sauvegarder en PDF');
+}
+
+/* ======= RENDER ALL ======= */
+function renderAll() {
+  renderDashboard();
+  renderProduits();
+  updateVenteSelect();
+  renderHistorique();
+  renderAlertes();
+  renderBenefices();
+}
+
+renderAll();
+</script>
+
+<!-- PWA Banner installation -->
+<div id="pwa-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#0f6b3a,#0a4a28);color:#fff;padding:16px 20px;z-index:9999;box-shadow:0 -4px 20px rgba(0,0,0,.25);display:none;align-items:center;gap:14px;">
+  <img src="icon-192.png" style="width:44px;height:44px;border-radius:10px;" alt="icon">
+  <div style="flex:1;">
+    <div style="font-size:14px;font-weight:800;">Installer MonStock Pro</div>
+    <div style="font-size:12px;opacity:.75;">Ajoutez l'icône sur votre écran d'accueil</div>
+  </div>
+  <button onclick="installerPWA()" style="background:#e8a010;color:#1a1a1a;border:none;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:800;cursor:pointer;">Installer</button>
+  <button onclick="document.getElementById('pwa-banner').style.display='none'" style="background:rgba(255,255,255,.15);color:#fff;border:none;padding:10px;border-radius:8px;cursor:pointer;font-size:16px;">✕</button>
+</div>
+
+<script>
+// ===== PWA - Service Worker =====
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('./sw.js').then(function(reg) {
+      console.log('[MonStock Pro] Service Worker enregistré :', reg.scope);
+    }).catch(function(err) {
+      console.log('[MonStock Pro] SW erreur :', err);
+    });
+  });
+}
+
+// ===== PWA - Bouton installation =====
+var deferredPrompt = null;
+var banner = document.getElementById('pwa-banner');
+
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Afficher le banner après 3 secondes
+  setTimeout(function() {
+    banner.style.display = 'flex';
+  }, 3000);
+});
+
+function installerPWA() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(result) {
+    if (result.outcome === 'accepted') {
+      console.log('[MonStock Pro] App installée !');
+      banner.style.displ
